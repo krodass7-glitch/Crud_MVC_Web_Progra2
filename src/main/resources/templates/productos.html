@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro de Productos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">Menú</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/marcas}">Marcas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/productos}">Productos</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search"/>
+                        <button class="btn btn-outline-success" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1 class="mb-4">Registro de Productos</h1>
+            
+            <p th:if="${error}" th:text="${error}" class="alert alert-danger"></p>
+            <p th:if="${exito}" th:text="${exito}" class="alert alert-success"></p>
+
+            <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" class="card card-body shadow-sm mb-4">    
+                <input type="hidden" th:field="*{id_producto}" />
+                
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="id_marca" class="form-label fw-bold">Marca:</label>
+                        <select th:field="*{id_marca}" id="id_marca" class="form-select" required>
+                            <option value="0">-- Seleccione una Marca --</option>
+                            <option th:each="m : ${marcas}" 
+                                    th:value="${m.id_marca}" 
+                                    th:text="${m.nombre_marca}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="nombre" class="form-label fw-bold">Nombre del Producto:</label>
+                        <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="Ingrese nombre del producto" required>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="precio" class="form-label fw-bold">Precio (Q):</label>
+                        <input type="number" step="0.01" th:field="*{precio}" id="precio" class="form-control" placeholder="0.00" required>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label for="stock" class="form-label fw-bold">Stock:</label>
+                        <input type="number" th:field="*{stock}" id="stock" class="form-control" placeholder="Cantidad en existencia" required>
+                    </div>
+
+                    <div class="col-12 text-end mt-3">
+                        <button type="submit" class="btn btn-primary px-4">
+                            Guardar Producto
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID Producto</th>
+                            <th>ID Marca</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${productos}">
+                            <td th:text="${p.id_producto}"></td>
+                            <td th:text="${p.id_marca}"></td>
+                            <td th:text="${p.nombre}"></td>
+                            <td th:text="${'Q ' + #numbers.formatDecimal(p.precio, 1, 2)}"></td>
+                            <td th:text="${p.stock}"></td>
+                            <td class="text-center">
+                                <a th:href="@{/productos/editar/{id}(id=${p.id_producto})}" class="btn btn-sm btn-warning">Editar</a>
+                                <form th:action="@{/productos/eliminar/{id}(id=${p.id_producto})}" method="post" style="display:inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>    
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

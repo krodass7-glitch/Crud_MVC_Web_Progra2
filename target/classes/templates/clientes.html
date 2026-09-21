@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro de Clientes</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" th:href="@{/}">Menú</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" th:href="@{/clientes}">Clientes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/marcas}">Marcas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/productos}">Productos</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+        <div class="container">
+            <h1>Registro de Clientes</h1>
+            
+            <p th:if="${error}" th:text="${error}" class="alert alert-danger"></p>
+            <p th:if="${exito}" th:text="${exito}" class="alert alert-success"></p>
+
+<form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post" class="card card-body shadow-sm mb-4">    
+    <input type="hidden" th:field="*{id_cliente}" />
+    
+    <div class="row g-3">
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <label for="nit" class="form-label fw-bold">NIT:</label>
+            <input type="text" th:field="*{nit}" id="nit" class="form-control" placeholder="Ingrese NIT" required>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <label for="nombre" class="form-label fw-bold">Nombre:</label>
+            <input type="text" th:field="*{nombre}" id="nombre" class="form-control" placeholder="Ingrese nombre" required>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <label for="apellidos" class="form-label fw-bold">Apellidos:</label>
+            <input type="text" th:field="*{apellidos}" id="apellidos" class="form-control" placeholder="Ingrese apellidos" required>
+        </div>
+
+        <div class="col-12 col-md-6 col-lg-3">
+            <label for="email" class="form-label fw-bold">Email:</label>
+            <input type="email" th:field="*{email}" id="email" class="form-control" placeholder="correo@ejemplo.com" required>    
+        </div>
+
+        <div class="col-12 text-end mt-3">
+            <button type="submit" class="btn btn-primary px-4">
+                <i class="bi bi-save"></i> Guardar
+            </button>
+        </div>
+    </div>
+</form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>NIT</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${clientes}">
+                        <td th:text="${c.nit}"></td>
+                        <td th:text="${c.nombre}"></td>
+                        <td th:text="${c.apellidos}"></td>
+                        <td th:text="${c.email}"></td>
+                        <td>
+                            <a th:href="@{/clientes/editar/{id}(id=${c.id_cliente})}" class="btn btn-sm btn-warning">Editar</a>
+                            <form th:action="@{/clientes/eliminar/{id}(id=${c.id_cliente})}" method="post" style="display:inline">
+                                <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
