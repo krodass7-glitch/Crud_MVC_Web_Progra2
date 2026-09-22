@@ -9,6 +9,10 @@ public class Cliente extends persona {
     private String nit;
     private String email;
 
+    public Cliente() {
+        super("", "");
+    }
+
     public Cliente(int id_cliente, String nombre, String apellidos, String nit, String email) {
         super(nombre, apellidos);
         this.id_cliente = id_cliente;

@@ -25,8 +25,7 @@ public class ClienteDAO implements crudDAO<Cliente> {
             ps.setString(3, objeto.getApellidos());
             ps.setString(4, objeto.getEmail());
 
-            ps.executeUpdate();
-            return true;
+            return ps.executeUpdate() > 0;
 
         }catch(SQLException e) {
             System.out.println("Error al insertar cliente: ");
@@ -48,27 +47,26 @@ public class ClienteDAO implements crudDAO<Cliente> {
             ps.setString(3, objeto.getApellidos());
             ps.setString(4, objeto.getEmail());
             ps.setString(5, objeto.getNit());
-            ps.setInt(6, objeto.getId_cliente());
 
-            ps.executeUpdate();
-            return true;
+            return ps.executeUpdate() > 0;
 
         }catch(SQLException e) {
-            System.out.println("Error al actualizar cliente: ");
+            System.out.println("Error al actualizar cliente: "+ e.getMessage());
+            e.printStackTrace();
             return false;
         }
 
     }
 
     @Override
-    public boolean eliminar (Cliente id) {
+    public boolean eliminar (Cliente objeto) {
 
         String sql = "DELETE FROM clientes WHERE id_cliente = ?";
         try {
 
             Connection conn = ConexionBD.IniciarConexion();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, id.getId_cliente());
+            ps.setInt(1, objeto.getId_cliente());
 
             ps.executeUpdate();
             return true;
