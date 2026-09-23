@@ -16,7 +16,7 @@ import org.springframework.ui.Model;
 public class clienteControlador {
     private ClienteDAO clienteDAO = new ClienteDAO();
 
-    @GetMapping()
+    @GetMapping
     public String listar(Model model) {
         model.addAttribute("clientes", clienteDAO.listarTodos());
         if(!model.containsAttribute("cliente")) {
@@ -41,7 +41,7 @@ public class clienteControlador {
                      ? clienteDAO.insertar(cliente) 
                      : clienteDAO.actualizar(cliente);
             
-            if (ok) {
+            if (!ok) {
 
                 ra.addFlashAttribute("error", "Error al momento de almacenar.");
             } 

@@ -28,7 +28,7 @@ public class ClienteDAO implements crudDAO<Cliente> {
             return ps.executeUpdate() > 0;
 
         }catch(SQLException e) {
-            System.out.println("Error al insertar cliente: ");
+            System.out.println("Error al insertar cliente: "+e.getMessage());
             return false;
         }
 
@@ -46,7 +46,7 @@ public class ClienteDAO implements crudDAO<Cliente> {
             ps.setString(2, objeto.getNombre());
             ps.setString(3, objeto.getApellidos());
             ps.setString(4, objeto.getEmail());
-            ps.setString(5, objeto.getNit());
+            ps.setInt(5, objeto.getId_cliente());
 
             return ps.executeUpdate() > 0;
 
@@ -119,9 +119,9 @@ public class ClienteDAO implements crudDAO<Cliente> {
     private Cliente mapearCliente(ResultSet rs) throws SQLException {
         return new Cliente(
             rs.getInt("id_cliente"),
-            rs.getString("nit"),
             rs.getString("nombre"),
             rs.getString("apellidos"),
+            rs.getString("nit"),
             rs.getString("email")
         );
     }
